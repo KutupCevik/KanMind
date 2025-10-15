@@ -9,3 +9,7 @@ class Board(models.Model):
 
     def __str__(self):
         pass
+
+
+class BoardMember(models.Model):
+    pass
