@@ -13,10 +13,13 @@ class Board(models.Model):
 
 
 class BoardMember(models.Model):
-    board = models.ForeignKey()
-    user = models.ForeignKey()
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     added_at = models.DateTimeField(auto_now_add=True)
 
+    #https://docs.djangoproject.com/en/5.2/ref/models/options/#unique-together
+    class Meta:
+        unique_together = ('board', 'user')
 
 class Task(models.Model):
     # Quelle: https://docs.djangoproject.com/en/5.2/ref/models/fields/#choices
