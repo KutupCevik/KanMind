@@ -13,3 +13,7 @@ class Board(models.Model):
 
 class BoardMember(models.Model):
     pass
+
+
+class Task(models.Model):
+    pass
