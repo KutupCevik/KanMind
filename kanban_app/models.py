@@ -13,7 +13,9 @@ class Board(models.Model):
 
 
 class BoardMember(models.Model):
-    pass
+    board = models.ForeignKey()
+    user = models.ForeignKey()
+    added_at = models.DateTimeField(auto_now_add=True)
 
 
 class Task(models.Model):
