@@ -32,6 +32,20 @@ class Task(models.Model):
         ('high', 'High'),
     ]
 
+    bord = models.ForeignKey()
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    status =models.CharField(max_length=20)
+    priority = models.CharField(max_length=20)
+    created_by = models.ForeignKey()
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
+    due_date = models.DateField()
+    assignee = models.ForeignKey()
+    reviewer = models.ForeignKey()
+
+    def __str__(self):
+        return self.title
 
 class Comment(models.Model):
     pass
