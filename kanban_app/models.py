@@ -19,7 +19,18 @@ class BoardMember(models.Model):
 
 
 class Task(models.Model):
-    pass
+    # Quelle: https://docs.djangoproject.com/en/5.2/ref/models/fields/#choices
+    STATUS_CHOICES = [
+        ('to-do', 'To Do'),
+        ('in-progress', 'In Progress'),
+        ('review', 'Review'),
+        ('done', 'Done'),
+    ]
+    PRIORITY_CHOICES = [
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+    ]
 
 
 class Comment(models.Model):
