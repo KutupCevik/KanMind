@@ -21,8 +21,9 @@ class BoardMember(models.Model):
     class Meta:
         unique_together = ('board', 'user')
 
+
 class Task(models.Model):
-    # Quelle: https://docs.djangoproject.com/en/5.2/ref/models/fields/#choices
+    #https://docs.djangoproject.com/en/5.2/ref/models/fields/#choices
     STATUS_CHOICES = [
         ('to-do', 'To Do'),
         ('in-progress', 'In Progress'),
