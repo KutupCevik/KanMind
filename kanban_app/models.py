@@ -17,3 +17,7 @@ class BoardMember(models.Model):
 
 class Task(models.Model):
     pass
+
+
+class Comment(models.Model):
+    pass
