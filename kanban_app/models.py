@@ -48,4 +48,10 @@ class Task(models.Model):
         return self.title
 
 class Comment(models.Model):
-    pass
+    task = models.ForeignKey()
+    author = models.ForeignKey()
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return
