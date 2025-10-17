@@ -55,3 +55,7 @@ class BoardCreateSerializer(serializers.ModelSerializer):
         board = Board.objects.create(**validated_data)
         board.members.add(*members)
         return board
+
+
+class BoardDetailSerializer():
+    pass
