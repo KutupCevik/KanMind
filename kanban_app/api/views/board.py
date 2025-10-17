@@ -39,5 +39,5 @@ class BoardListCreateView(generics.ListCreateAPIView):
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
 
-class BoardDetailView():
+class BoardDetailView(generics.ListAPIView):
     pass
