@@ -21,19 +21,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('repeated_password')
-        user = User.objects.create_user(**validated_data)
-        Token.objects.create(user=user)
-        return user
-
-
-
-    def validate(self, data):
-        if data['password'] != data['repeated_pw']:
-            raise serializers.ValidationError("Passwörter stimmen nicht überein.")
-        return data
-
-    def create(self, validated_data):
-        validated_data.pop('repeated_pw')
         user = User.objects.create_user(
             #Das User-Model von Django hat das Pflichtfeld "username"
             #https://docs.djangoproject.com/en/5.2/ref/contrib/auth/#user-model
