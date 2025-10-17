@@ -52,8 +52,6 @@ class BoardCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         members = validated_data.pop('members', [])
-        user = self.context['request'].user  # aktuell eingeloggter Benutzer
-        board = Board.objects.create(owner=user, **validated_data)
-        # Owner wird automatisch Mitglied
-        board.members.add(user, *members)
+        board = Board.objects.create(**validated_data)
+        board.members.add(*members)
         return board
