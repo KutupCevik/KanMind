@@ -24,7 +24,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(
             #Das User-Model von Django hat das Pflichtfeld "username"
             #https://docs.djangoproject.com/en/5.2/ref/contrib/auth/#user-model
-            #Selbst wenn man sich per E-Mail einloggt, erwartet Django intern einen username
+            #Selbst wenn man sich per E-Mail einloggt, erwartet Django intern ein username
             username=validated_data['email'],   # Username intern = E-Mail
             email=validated_data['email'],
             password=validated_data['password'],
