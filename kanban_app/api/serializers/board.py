@@ -10,8 +10,10 @@ from kanban_app.models import Board, BoardMember, Task, Comment
 from django.db.models import Count
 
 
-"""Serializer für Board-Übersicht (GET /api/boards/)."""
 class BoardListSerializer(serializers.ModelSerializer):
+    """
+    Serializer für Board-Übersicht (GET /api/boards/)
+    """
     member_count = serializers.SerializerMethodField()
     ticket_count = serializers.SerializerMethodField()
     tasks_to_do_count = serializers.SerializerMethodField()
@@ -42,8 +44,10 @@ class BoardListSerializer(serializers.ModelSerializer):
         return obj.tasks.filter(priority='high').count()
 
 
-"""Serializer für Board-Erstellung (POST /api/boards/)"""
 class BoardCreateSerializer(serializers.ModelSerializer):
+    """
+    Serializer für Board-Erstellung (POST /api/boards/)
+    """
     members = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False)
 
     class Meta:
@@ -57,8 +61,10 @@ class BoardCreateSerializer(serializers.ModelSerializer):
         return board
 
 
-'''Für Board-Mitglieder'''
 class MemberSerializer(serializers.ModelSerializer):
+    '''
+    Für Board-Mitglieder
+    '''
     fullname = serializers.CharField(source='first_name')
 
     class Meta:
@@ -66,8 +72,10 @@ class MemberSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'fullname']
 
 
-'''Für Tasks im Board-Detail'''
 class TaskListSerializer(serializers.ModelSerializer):
+    '''
+    Für Tasks im Board-Detail
+    '''
     assignee = MemberSerializer(read_only=True)
     reviewer = MemberSerializer(read_only=True)
     comments_count = serializers.IntegerField(source='comments.count', read_only=True)
@@ -87,8 +95,10 @@ class TaskListSerializer(serializers.ModelSerializer):
         ]
 
 
-'''Serializer für Board-Detail (GET /api/boards/{id}/)'''
 class BoardDetailSerializer(serializers.ModelSerializer):
+    '''
+    Serializer für Board-Detail (GET /api/boards/{id}/)
+    '''
     owner_id = serializers.IntegerField(source='owner.id', read_only=True)
     members = MemberSerializer(many=True, read_only=True)
     tasks = TaskListSerializer(many=True, read_only=True, source='tasks.all')
@@ -98,8 +108,10 @@ class BoardDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'owner_id', 'members', 'tasks']
 
 
-'''Serializer für Board-Update (PATCH /api/boards/{id}/).'''
 class BoardUpdateSerializer(serializers.ModelSerializer):
+    '''
+    Serializer für Board-Update (PATCH /api/boards/{id}/)
+    '''
     members = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
     owner_data = MemberSerializer(source='owner', read_only=True)
     members_data = MemberSerializer(source='members', many=True, read_only=True)

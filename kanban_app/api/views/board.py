@@ -9,11 +9,11 @@ from kanban_app.api.serializers.board import BoardListSerializer, BoardCreateSer
 from kanban_app.api.permissions import IsBoardMemberOrOwner
 
 
-'''
-GET  /api/boards/: Zeigt alle Boards, bei denen der Benutzer beteiligt ist.
-POST /api/boards/: Erstellt ein neues Board, setzt den Benutzer als Owner.
-'''
 class BoardListCreateView(generics.ListCreateAPIView):
+    '''
+    GET  /api/boards/: Zeigt alle Boards, bei denen der Benutzer beteiligt ist.
+    POST /api/boards/: Erstellt ein neues Board, setzt den Benutzer als Owner.
+    '''
     def get_queryset(self):
         user = self.request.user
         owned = Board.objects.filter(owner=user)
@@ -28,11 +28,11 @@ class BoardListCreateView(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-'''
-GET     /api/boards/{board_id}/: Zeigt Board mit Members und Tasks.
-PATCH   /api/boards/{board_id}/: Aktualisiert Titel und Mitgliederliste.
-'''
 class BoardDetailUpdateView(generics.RetrieveUpdateAPIView):
+    '''
+    GET     /api/boards/{board_id}/: Zeigt Board mit Members und Tasks.
+    PATCH   /api/boards/{board_id}/: Aktualisiert Titel und Mitgliederliste.
+    '''
     queryset = Board.objects.all()
     permission_classes = [IsAuthenticated, IsBoardMemberOrOwner]
 
