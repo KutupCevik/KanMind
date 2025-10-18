@@ -1,10 +1,13 @@
 # Third-party
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 # Lokale Module
 from kanban_app.models import Board
-from kanban_app.api.serializers.board import BoardListSerializer, BoardCreateSerializer
+from kanban_app.api.serializers.board import BoardListSerializer, BoardCreateSerializer, BoardDetailSerializer
+from kanban_app.api.permissions import IsBoardMemberOrOwner
+
 
 '''
 GET  /api/boards/: Zeigt alle Boards, bei denen der Benutzer beteiligt ist.
@@ -39,5 +42,10 @@ class BoardListCreateView(generics.ListCreateAPIView):
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
 
-class BoardDetailView(generics.ListAPIView):
-    pass
+'''
+GET /api/boards/{board_id}/: Gibt ein einzelnes Board inklusive Members und Tasks zurück.
+'''
+class BoardDetailView(generics.RetrieveAPIView):
+    queryset = Board.objects.all()
+    serializer_class = BoardDetailSerializer
+    permission_classes = [IsAuthenticated, IsBoardMemberOrOwner]
