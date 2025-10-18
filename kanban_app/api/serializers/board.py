@@ -57,8 +57,8 @@ class BoardCreateSerializer(serializers.ModelSerializer):
         return board
 
 
+'''Für Board-Mitglieder'''
 class MemberSerializer(serializers.ModelSerializer):
-    '''Für Board-Mitglieder'''
     fullname = serializers.CharField(source='first_name')
 
     class Meta:
@@ -66,8 +66,8 @@ class MemberSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'fullname']
 
 
+'''Für Tasks im Board-Detail'''
 class TaskListSerializer(serializers.ModelSerializer):
-    '''Für Tasks im Board-Detail'''
     assignee = MemberSerializer(read_only=True)
     reviewer = MemberSerializer(read_only=True)
     comments_count = serializers.IntegerField(source='comments.count', read_only=True)
