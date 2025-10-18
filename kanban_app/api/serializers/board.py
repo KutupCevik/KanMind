@@ -57,6 +57,11 @@ class BoardCreateSerializer(serializers.ModelSerializer):
         return board
 
 
+class MemberSerializer(serializers.ModelSerializer):
+    pass
+
+
 '''Serializer für Board-Detail (GET /api/boards/{id}/)'''
 class BoardDetailSerializer(serializers.ModelSerializer):
     owner_id = serializers.IntegerField(source='owner.id', read_only=True)
+    members = MemberSerializer(many=True, read_only=True)
