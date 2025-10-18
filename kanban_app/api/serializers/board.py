@@ -100,4 +100,22 @@ class BoardDetailSerializer(serializers.ModelSerializer):
 
 '''Serializer für Board-Update (PATCH /api/boards/{id}/).'''
 class BoardUpdateSerializer(serializers.ModelSerializer):
-    pass
+    members = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+    owner_data = MemberSerializer(source='owner', read_only=True)
+    members_data = MemberSerializer(source='members', many=True, read_only=True)
+
+    class Meta:
+        model = Board
+        fields = ['id', 'title', 'members', 'owner_data', 'members_data']
+
+    def update(self, instance, validated_data):
+        members = validated_data.pop('members', [])
+        instance.title = validated_data.get('title', instance.title)
+        instance.save()
+
+        # Mitgliederliste ersetzen (bestehende löschen, neue setzen)
+        instance.members.set(members)
+        # Owner bleibt automatisch Mitglied
+        instance.members.add(instance.owner)
+
+        return instance
