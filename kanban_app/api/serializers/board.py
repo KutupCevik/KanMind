@@ -61,6 +61,10 @@ class MemberSerializer(serializers.ModelSerializer):
     pass
 
 
+class TaskListSerializer(serializers.ModelSerializer):
+    pass
+
+
 '''Serializer für Board-Detail (GET /api/boards/{id}/)'''
 class BoardDetailSerializer(serializers.ModelSerializer):
     owner_id = serializers.IntegerField(source='owner.id', read_only=True)
