@@ -96,3 +96,8 @@ class BoardDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
         fields = ['id', 'title', 'owner_id', 'members', 'tasks']
+
+
+'''Serializer für Board-Update (PATCH /api/boards/{id}/).'''
+class BoardUpdateSerializer(serializers.ModelSerializer):
+    pass
