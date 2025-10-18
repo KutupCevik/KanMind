@@ -69,3 +69,8 @@ class TaskListSerializer(serializers.ModelSerializer):
 class BoardDetailSerializer(serializers.ModelSerializer):
     owner_id = serializers.IntegerField(source='owner.id', read_only=True)
     members = MemberSerializer(many=True, read_only=True)
+    tasks = TaskListSerializer(many=True, read_only=True, source='tasks.all')
+
+    class Meta:
+        model = Board
+        fields = ['id', 'title', 'owner_id', 'members', 'tasks']
