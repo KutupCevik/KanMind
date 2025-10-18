@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 # Lokale Module
 from kanban_app.models import Board
 from kanban_app.api.serializers.board import BoardListSerializer, BoardCreateSerializer, BoardDetailSerializer, BoardUpdateSerializer
-from kanban_app.api.permissions import IsBoardMemberOrOwner
+from kanban_app.api.permissions import IsBoardMemberOrOwner, IsBoardOwner
 
 
 class BoardListCreateView(generics.ListCreateAPIView):
@@ -28,15 +28,25 @@ class BoardListCreateView(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-class BoardDetailUpdateView(generics.RetrieveUpdateAPIView):
+class BoardDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     '''
     GET     /api/boards/{board_id}/: Zeigt Board mit Members und Tasks.
     PATCH   /api/boards/{board_id}/: Aktualisiert Titel und Mitgliederliste.
+    DELETE  /api/boards/{board_id}/: Board löschen (nur Owner).
     '''
     queryset = Board.objects.all()
-    permission_classes = [IsAuthenticated, IsBoardMemberOrOwner]
+
+    def get_permissions(self):
+        if self.request.method == 'DELETE':
+            return [IsAuthenticated(), IsBoardOwner()]
+        return [IsAuthenticated(), IsBoardMemberOrOwner()]
 
     def get_serializer_class(self):
         if self.request.method == 'PATCH':
             return BoardUpdateSerializer
         return BoardDetailSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        board = self.get_object()
+        self.perform_destroy(board)
+        return Response(status=status.HTTP_204_NO_CONTENT)
