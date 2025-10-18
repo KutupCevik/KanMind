@@ -58,7 +58,12 @@ class BoardCreateSerializer(serializers.ModelSerializer):
 
 
 class MemberSerializer(serializers.ModelSerializer):
-    pass
+    '''Für Board-Mitglieder'''
+    fullname = serializers.CharField(source='first_name')
+
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'fullname']
 
 
 class TaskListSerializer(serializers.ModelSerializer):
