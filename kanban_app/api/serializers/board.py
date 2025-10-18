@@ -67,7 +67,24 @@ class MemberSerializer(serializers.ModelSerializer):
 
 
 class TaskListSerializer(serializers.ModelSerializer):
-    pass
+    '''Für Tasks im Board-Detail'''
+    assignee = MemberSerializer(read_only=True)
+    reviewer = MemberSerializer(read_only=True)
+    comments_count = serializers.IntegerField(source='comments.count', read_only=True)
+
+    class Meta:
+        model = Task
+        fields = [
+            'id',
+            'title',
+            'description',
+            'status',
+            'priority',
+            'assignee',
+            'reviewer',
+            'due_date',
+            'comments_count',
+        ]
 
 
 '''Serializer für Board-Detail (GET /api/boards/{id}/)'''
