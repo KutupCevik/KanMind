@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 
 # Lokale Module
 from kanban_app.models import Board
-from kanban_app.api.serializers.board import BoardListSerializer, BoardCreateSerializer, BoardDetailSerializer
+from kanban_app.api.serializers.board import BoardListSerializer, BoardCreateSerializer, BoardDetailSerializer, BoardUpdateSerializer
 from kanban_app.api.permissions import IsBoardMemberOrOwner
 
 
@@ -29,9 +29,14 @@ class BoardListCreateView(generics.ListCreateAPIView):
 
 
 '''
-GET /api/boards/{board_id}/: Gibt ein einzelnes Board inklusive Members und Tasks zurück.
+GET     /api/boards/{board_id}/: Zeigt Board mit Members und Tasks.
+PATCH   /api/boards/{board_id}/: Aktualisiert Titel und Mitgliederliste.
 '''
-class BoardDetailView(generics.RetrieveAPIView):
+class BoardDetailUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Board.objects.all()
-    serializer_class = BoardDetailSerializer
     permission_classes = [IsAuthenticated, IsBoardMemberOrOwner]
+
+    def get_serializer_class(self):
+        if self.request.method == 'PATCH':
+            return BoardUpdateSerializer
+        return BoardDetailSerializer
