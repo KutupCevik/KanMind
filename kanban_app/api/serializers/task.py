@@ -24,6 +24,8 @@ class TaskCreateSerializer(serializers.ModelSerializer):
     reviewer_id = serializers.PrimaryKeyRelatedField(
         source='reviewer', queryset=User.objects.all(), required=False, allow_null=True
     )
+    assignee = MemberSerializer(read_only=True)
+    reviewer = MemberSerializer(read_only=True)
     comments_count = serializers.SerializerMethodField()
 
     class Meta:
@@ -42,3 +44,30 @@ class TaskCreateSerializer(serializers.ModelSerializer):
             'due_date',
             'comments_count',
         ]
+
+    def get_comments_count(self, obj):
+        return obj.comments.count()
+
+    def validate_board(self, board):
+        '''Prüfen, ob der Benutzer Mitglied des Boards ist.'''
+        user = self.context['request'].user
+        if not (board.owner == user or board.members.filter(id=user.id).exists()):
+            raise serializers.ValidationError('Du bist kein Mitglied dieses Boards.')
+        return board
+
+    def validate(self, data):
+        '''Assignee und Reviewer müssen Mitglieder desselben Boards sein.'''
+        board = data.get('board')
+        assignee = data.get('assignee')
+        reviewer = data.get('reviewer')
+
+        for person in [assignee, reviewer]:
+            if person and not board.members.filter(id=person.id).exists() and person != board.owner:
+                raise serializers.ValidationError('Assignee oder Reviewer ist kein Mitglied des Boards.')
+        return data
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        validated_data['created_by'] = user
+        task = Task.objects.create(**validated_data)
+        return task
