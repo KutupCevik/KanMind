@@ -6,6 +6,15 @@ from django.contrib.auth.models import User
 from kanban_app.models import Task
 
 
+class MemberSerializer(serializers.ModelSerializer):
+    '''Kurzserializer für User (Assignee/Reviewer).'''
+    fullname = serializers.CharField(source='first_name')
+
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'fullname']
+
+
 class TaskCreateSerializer(serializers.ModelSerializer):
     '''Serializer für das Erstellen einer neuen Task (POST /api/tasks/).'''
 
