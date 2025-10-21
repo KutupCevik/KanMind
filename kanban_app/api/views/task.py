@@ -1,11 +1,12 @@
 # Third-party
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 # Lokale Module
 from kanban_app.models import Task
 from kanban_app.api.serializers.task import TaskCreateSerializer, TaskUpdateSerializer
-from kanban_app.api.permissions import IsBoardMemberOrOwner
+from kanban_app.api.permissions import IsBoardMemberOrOwner, IsTaskCreatorOrBoardOwner
 
 
 class TaskCreateView(generics.CreateAPIView):
@@ -17,10 +18,19 @@ class TaskCreateView(generics.CreateAPIView):
     serializer_class = TaskCreateSerializer
 
 
-class TaskUpdateView(generics.UpdateAPIView):
+class TaskUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     '''
     PATCH: Aktualisiert eine bestehende Task.
+    DELETE: Löscht eine Task. Nur der Ersteller oder der Board-Owner darf löschen.
     '''
     queryset = Task.objects.all()
     serializer_class = TaskUpdateSerializer
-    permission_classes = [IsAuthenticated, IsBoardMemberOrOwner]
+    def get_permissions(self):
+        if self.request.method == 'DELETE':
+            return [IsAuthenticated(), IsTaskCreatorOrBoardOwner()]
+        return [IsAuthenticated(), IsBoardMemberOrOwner()]
+
+    def destroy(self, request, *args, **kwargs):
+        task = self.get_object()
+        self.perform_destroy(task)
+        return Response(status=status.HTTP_204_NO_CONTENT)
