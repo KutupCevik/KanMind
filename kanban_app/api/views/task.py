@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 
 # Lokale Module
 from kanban_app.models import Task
-from kanban_app.api.serializers.task import TaskCreateSerializer, TaskUpdateSerializer
+from kanban_app.api.serializers.task import TaskCreateSerializer, TaskUpdateSerializer, TaskListSerializer
 from kanban_app.api.permissions import IsBoardMemberOrOwner, IsTaskCreatorOrBoardOwner
 
 
@@ -34,3 +34,13 @@ class TaskUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         task = self.get_object()
         self.perform_destroy(task)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TasksAssignedToMeView(generics.ListAPIView):
+    '''
+    GET: Gibt alle Tasks zurück, bei denen der Benutzer Assignee ist.
+    '''
+    serializer_class = TaskListSerializer
+
+    def get_queryset(self):
+        return Task.objects.filter(assignee=self.request.user)
