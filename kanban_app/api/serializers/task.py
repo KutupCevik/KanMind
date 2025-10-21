@@ -71,3 +71,59 @@ class TaskCreateSerializer(serializers.ModelSerializer):
         validated_data['created_by'] = user
         task = Task.objects.create(**validated_data)
         return task
+
+
+class TaskUpdateSerializer(serializers.ModelSerializer):
+    '''Serializer für Task-Aktualisierung (PATCH /api/tasks/{id}/).'''
+    assignee_id = serializers.PrimaryKeyRelatedField(
+        source='assignee', queryset=User.objects.all(), required=False, allow_null=True
+    )
+    reviewer_id = serializers.PrimaryKeyRelatedField(
+        source='reviewer', queryset=User.objects.all(), required=False, allow_null=True
+    )
+    assignee = serializers.SerializerMethodField()
+    reviewer = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Task
+        fields = [
+            'id',
+            'title',
+            'description',
+            'status',
+            'priority',
+            'assignee_id',
+            'reviewer_id',
+            'assignee',
+            'reviewer',
+            'due_date',
+        ]
+
+    def get_assignee(self, obj):
+        if obj.assignee:
+            return {
+                'id': obj.assignee.id,
+                'email': obj.assignee.email,
+                'fullname': obj.assignee.first_name
+            }
+        return None
+
+    def get_reviewer(self, obj):
+        if obj.reviewer:
+            return {
+                'id': obj.reviewer.id,
+                'email': obj.reviewer.email,
+                'fullname': obj.reviewer.first_name
+            }
+        return None
+
+    def validate(self, data):
+        task = self.instance
+        board = task.board
+        assignee = data.get('assignee')
+        reviewer = data.get('reviewer')
+
+        for person in [assignee, reviewer]:
+            if person and not board.members.filter(id=person.id).exists() and person != board.owner:
+                raise serializers.ValidationError('Assignee oder Reviewer ist kein Mitglied des Boards.')
+        return data
