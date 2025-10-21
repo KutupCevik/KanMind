@@ -7,9 +7,16 @@ class IsBoardMemberOrOwner(BasePermission):
     """
     def has_object_permission(self, request, view, obj):
         user = request.user
-        return bool(
-            user == obj.owner or obj.members.filter(id=user.id).exists()
-        )
+        # Wenn obj ein Board ist
+        if hasattr(obj, 'owner') and hasattr(obj, 'members'):
+            return obj.owner == user or obj.members.filter(id=user.id).exists()
+
+        # Wenn obj eine Task ist
+        if hasattr(obj, 'board'):
+            board = obj.board
+            return board.owner == user or board.members.filter(id=user.id).exists()
+
+        return False
 
 
 class IsBoardOwner(BasePermission):
