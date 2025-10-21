@@ -1,13 +1,18 @@
+# Third-party
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status
-from auth_app.api.serializers import RegistrationSerializer
+from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
+# Lokale Module
+from auth_app.api.serializers import RegistrationSerializer
+
 
 class RegistrationView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
@@ -23,6 +28,7 @@ class RegistrationView(APIView):
 
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
