@@ -127,3 +127,26 @@ class TaskUpdateSerializer(serializers.ModelSerializer):
             if person and not board.members.filter(id=person.id).exists() and person != board.owner:
                 raise serializers.ValidationError('Assignee oder Reviewer ist kein Mitglied des Boards.')
         return data
+
+
+class TaskListSerializer(serializers.ModelSerializer):
+    '''Serializer für Task-Listen (Assigned-to-me / Reviewing).'''
+    assignee = MemberSerializer(read_only=True)
+    reviewer = MemberSerializer(read_only=True)
+    comments_count = serializers.IntegerField(source='comments.count', read_only=True)
+    board = serializers.IntegerField(source='bord.id')
+
+    class Meta:
+        model = Task
+        fields = [
+            'id',
+            'board',
+            'title',
+            'description',
+            'status',
+            'priority',
+            'assignee',
+            'reviewer',
+            'due_date',
+            'comments_count',
+        ]
