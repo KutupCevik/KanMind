@@ -1,6 +1,9 @@
-# --- Python & Django Basics ---
+# ==========================
+# PYTHON / DJANGO
+# ==========================
 __pycache__/
 *.py[cod]
+*$py.class
 *.pyo
 *.pyd
 *.so
@@ -10,37 +13,51 @@ __pycache__/
 *.pot
 *.py,cover
 *.mo
+.coverage
+.coverage.*
+.pytest_cache/
+htmlcov/
+.cache/
+.tox/
+.nox/
+nosetests.xml
+coverage.xml
+test_db.sqlite3
 
-# --- Virtual Environment ---
+# ==========================
+# VIRTUAL ENVIRONMENTS
+# ==========================
 env/
 venv/
-ENV/
 .venv/
+ENV/
 env.bak/
 env.bkp/
 
-# --- Django Migrations ---
+# ==========================
+# DJANGO SPECIFIC
+# ==========================
 */migrations/__pycache__/
 */migrations/*.pyc
 */migrations/*.pyo
-*/migrations/*.pyd
-
-# --- SQLite / Datenbanken ---
 db.sqlite3
 db.sqlite3-journal
 *.db
 *.sqlite3
 
-# --- Environment / Secrets ---
+# ==========================
+# ENV / SECRETS
+# ==========================
 .env
 *.env
 .env.local
-.env.backup
 .env.development
 .env.production
 /secrets.json
 
-# --- Static & Media Files ---
+# ==========================
+# STATIC / MEDIA
+# ==========================
 staticfiles/
 static/
 media/
@@ -52,45 +69,65 @@ mediafiles/
 *.gif
 *.svg
 
-# --- VSCode / IDE ---
-.vscode/
+# ==========================
+# IDE / EDITOR
+# ==========================
 .idea/
-*.code-workspace
+*.sublime-*
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
-# --- Bytecode & Cache ---
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.cache/
-.cache/
-*.pytest_cache/
-.coverage
-coverage.xml
+# ==========================
+# BUILD / DISTRIBUTION
+# ==========================
+.Python
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+.installed.cfg
+MANIFEST
 
-# --- OS Files ---
+# ==========================
+# FRONTEND (OPTIONAL ANGULAR)
+# ==========================
+dist/
+tmp/
+app/**/*.js
+app/**/*.js.map
+node_modules/
+bower_components/
+
+# ==========================
+# OS FILES
+# ==========================
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# --- Git itself ---
-.gitignore
-.gitconfig
-
-# --- Test / Coverage ---
-htmlcov/
-.tox/
-.nox/
-.coverage.*
-nosetests.xml
-test_db.sqlite3
-*.log
-
-# --- Docker (falls später genutzt) ---
-docker-compose.override.yml
-*.pid
-
-# --- Backups ---
+# ==========================
+# BACKUPS / TEMP
+# ==========================
 *.bak
 *.old
 *.tmp
+*.swp
+*~
+
+# ==========================
+# GIT / DOCKER
+# ==========================
+.gitconfig
+docker-compose.override.yml
+*.pid
