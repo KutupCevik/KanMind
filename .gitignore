@@ -1,78 +1,96 @@
-# Python
+# --- Python & Django Basics ---
 __pycache__/
 *.py[cod]
-*$py.class
-.pytest_cache/
-.coverage
+*.pyo
+*.pyd
 *.so
+*.egg
+*.egg-info/
+*.log
+*.pot
+*.py,cover
+*.mo
 
-# Local environment files
-venv/
+# --- Virtual Environment ---
 env/
+venv/
+ENV/
 .venv/
-.env/
+env.bak/
+env.bkp/
 
-# Common
+# --- Django Migrations ---
+*/migrations/__pycache__/
+*/migrations/*.pyc
+*/migrations/*.pyo
+*/migrations/*.pyd
+
+# --- SQLite / Datenbanken ---
+db.sqlite3
+db.sqlite3-journal
+*.db
+*.sqlite3
+
+# --- Environment / Secrets ---
+.env
+*.env
+.env.local
+.env.backup
+.env.development
+.env.production
+/secrets.json
+
+# --- Static & Media Files ---
+staticfiles/
+static/
+media/
+mediafiles/
+*.pdf
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.svg
+
+# --- VSCode / IDE ---
+.vscode/
+.idea/
+*.code-workspace
+
+# --- Bytecode & Cache ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.cache/
+.cache/
+*.pytest_cache/
+.coverage
+coverage.xml
+
+# --- OS Files ---
 .DS_Store
 Thumbs.db
-*.log
-*.bak
-*.tmp
-*.swp
-*~
+desktop.ini
 
-# IDE and editor generated files
-.idea/
-*.sublime-*
+# --- Git itself ---
+.gitignore
+.gitconfig
 
-# VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-## Angular ##
-# compiled output
-dist/
-tmp/
-app/**/*.js
-app/**/*.js.map
-
-# dependencies
-node_modules/
-bower_components/
-
-# Unit test / coverage reports
+# --- Test / Coverage ---
 htmlcov/
 .tox/
 .nox/
-.coverage
 .coverage.*
-.cache
 nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
+test_db.sqlite3
+*.log
+
+# --- Docker (falls später genutzt) ---
+docker-compose.override.yml
+*.pid
+
+# --- Backups ---
+*.bak
+*.old
+*.tmp
