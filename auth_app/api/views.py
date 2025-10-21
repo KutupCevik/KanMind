@@ -12,6 +12,9 @@ from auth_app.api.serializers import RegistrationSerializer
 
 
 class RegistrationView(APIView):
+    '''
+    POST /registration/
+    '''
     permission_classes = [AllowAny]
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
@@ -28,6 +31,9 @@ class RegistrationView(APIView):
 
 
 class LoginView(APIView):
+    '''
+    POST /login/
+    '''
     permission_classes = [AllowAny]
     def post(self, request):
         email = request.data.get('email')
@@ -56,7 +62,6 @@ class EmailCheckView(APIView):
     Prüft, ob eine E-Mail im System existiert.
     Nur für eingeloggte Benutzer zugänglich.
     '''
-
     def get(self, request):
         email = request.query_params.get('email')
 
