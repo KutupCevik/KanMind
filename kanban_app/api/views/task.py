@@ -1,8 +1,11 @@
+# Third-party
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+
+# Lokale Module
 from kanban_app.models import Task
 from kanban_app.api.serializers.task import TaskCreateSerializer, TaskUpdateSerializer
 from kanban_app.api.permissions import IsBoardMemberOrOwner
-from rest_framework.permissions import IsAuthenticated
 
 
 class TaskCreateView(generics.CreateAPIView):
