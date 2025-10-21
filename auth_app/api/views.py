@@ -31,7 +31,7 @@ class LoginView(APIView):
         except User.DoesNotExist:
             return Response({"detail": "Ungültige E-Mail oder Passwort."}, status=400)
 
-        user = authenticate(username=user_obj.username, password=password)  #warum muss ich authenticate sagen, dass es das Passwort prüft? Blöde funktion
+        user = authenticate(username=user_obj.username, password=password)
         if not user:
             return Response({"detail": "Ungültige E-Mail oder Passwort."}, status=400)
 
@@ -44,28 +44,27 @@ class LoginView(APIView):
         }, status=200)
 
 
-# class CustomLoginView(ObtainAuthToken):
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.serializer_class(data=request.data, context={'request': request})
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.validated_data['user']
-#         token, _ = Token.objects.get_or_create(user=user)
-#         return Response({
-#             "token": token.key,
-#             "fullname": user.first_name,
-#             "email": user.email,
-#             "user_id": user.id
-#         })
+class EmailCheckView(APIView):
+    '''
+    GET /api/email-check/
+    Prüft, ob eine E-Mail im System existiert.
+    Nur für eingeloggte Benutzer zugänglich.
+    '''
 
+    def get(self, request):
+        email = request.query_params.get('email')
 
-# class CustomLoginView(ObtainAuthToken):
-#     def post(self, request, *args, **kwargs):
-#         response = super().post(request, *args, **kwargs)
-#         token = Token.objects.get(key=response.data['token'])
-#         user = token.user
-#         return Response({
-#             'token': token.key,
-#             'fullname': user.first_name,
-#             'email': user.email,
-#             'user_id': user.id
-#         })
+        if not email:
+            return Response({'detail': 'E-Mail-Adresse fehlt.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'detail': 'E-Mail wurde nicht gefunden.'}, status=status.HTTP_404_NOT_FOUND)
+
+        data = {
+            'id': user.id,
+            'email': user.email,
+            'fullname': user.first_name
+        }
+        return Response(data, status=status.HTTP_200_OK)
