@@ -40,7 +40,7 @@ Both **Windows** and **macOS** installation instructions are included.
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YourUsername/KanMind.git
+git clone https://github.com/KutupCevik/KanMind.git
 cd KanMind
 
 # 2. Create and activate a virtual environment
@@ -68,7 +68,7 @@ python manage.py runserver
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YourUsername/KanMind.git
+git clone https://github.com/KutupCevik/KanMind.git
 cd KanMind
 
 # 2. Create and activate a virtual environment
