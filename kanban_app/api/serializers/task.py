@@ -1,6 +1,7 @@
 # Third-party
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from rest_framework.exceptions import PermissionDenied
 
 # Lokale Module
 from kanban_app.models import Task
@@ -56,7 +57,7 @@ class TaskCreateSerializer(serializers.ModelSerializer):
         '''Prüfen, ob der Benutzer Mitglied des Boards ist.'''
         user = self.context['request'].user
         if not (board.owner == user or board.members.filter(id=user.id).exists()):
-            raise serializers.ValidationError('Du bist kein Mitglied dieses Boards.')
+            raise PermissionDenied('Du bist kein Mitglied dieses Boards.')
         return board
 
     def validate(self, data):
