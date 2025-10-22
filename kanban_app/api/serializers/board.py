@@ -57,7 +57,7 @@ class BoardCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         members = validated_data.pop('members', [])
         board = Board.objects.create(**validated_data)
-        board.members.add(*members)
+        board.members.add(board.owner, *members)
         return board
 
 
