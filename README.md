@@ -34,14 +34,58 @@ README.md
 ```
 
 ## 🚀 Installation
+💻 Windows Setup
+
 ```bash
-git clone https://github.com/KutupCevik/KanMind.git
-cd kanmind-api
+# 1. Clone the repository
+git clone https://github.com/YourUsername/KanMind.git
+cd KanMind
+
+# 2. Create and activate a virtual environment
 python -m venv env
-"env/Scripts/activate"
+"env\Scripts\activate"
+
+# 3. Install dependencies
+python -m pip install --upgrade pip
 pip install -r requirements.txt
+
+# 4. Apply migrations and create the database
 python manage.py migrate
+
+# 5. (Optional) Create a superuser for admin access
+python manage.py createsuperuser
+
+# 6. Run the development server
 python manage.py runserver
+
+# 7. Open in your browser
+# → http://127.0.0.1:8000/
+
+## 🍎 macOS Setup
+
+# 1. Clone the repository
+git clone https://github.com/YourUsername/KanMind.git
+cd KanMind
+
+# 2. Create and activate a virtual environment
+python3 -m venv env
+source env/bin/activate
+
+# 3. Install dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# 4. Apply migrations
+python3 manage.py migrate
+
+# 5. (Optional) Create a superuser
+python3 manage.py createsuperuser
+
+# 6. Run the server
+python3 manage.py runserver
+
+# 7. Open in your browser
+# → http://127.0.0.1:8000/
 ```
 
 ## 🔐 Authentication
