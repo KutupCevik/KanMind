@@ -1,5 +1,3 @@
-# KanMind
-
 # 📘 KanMind API  
 A collaborative Kanban-based task management API built with Django REST Framework.  
 This project provides endpoints for authentication, board management, tasks, comments, and user utilities.
@@ -60,9 +58,11 @@ python manage.py runserver
 
 # 7. Open in your browser
 # → http://127.0.0.1:8000/
+```
 
 ## 🍎 macOS Setup
 
+```bash
 # 1. Clone the repository
 git clone https://github.com/YourUsername/KanMind.git
 cd KanMind
