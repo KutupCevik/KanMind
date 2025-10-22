@@ -32,7 +32,11 @@ README.md
 ```
 
 ## 🚀 Installation
-💻 Windows Setup
+Follow the steps below to clone and run **KanMind** on your local machine.  
+Both **Windows** and **macOS** installation instructions are included.
+
+---
+#💻 Windows Setup
 
 ```bash
 # 1. Clone the repository
@@ -60,7 +64,7 @@ python manage.py runserver
 # → http://127.0.0.1:8000/
 ```
 
-## 🍎 macOS Setup
+# 🍎 macOS Setup
 
 ```bash
 # 1. Clone the repository
@@ -87,6 +91,23 @@ python3 manage.py runserver
 # 7. Open in your browser
 # → http://127.0.0.1:8000/
 ```
+
+# ⚙️ Notes
+
+Make sure Python ≥ 3.10 and Git are installed.
+
+Your .env file must include all environment variables such as:
+
+SECRET_KEY=your_django_secret_key
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1,localhost
+
+
+Stop the server anytime with:
+
+Windows: Ctrl + C
+
+macOS: Cmd + C
 
 ## 🔐 Authentication
 Token Authentication is used for all endpoints except registration and login.
