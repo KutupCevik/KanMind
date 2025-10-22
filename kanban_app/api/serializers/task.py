@@ -19,10 +19,10 @@ class TaskCreateSerializer(serializers.ModelSerializer):
     '''Serializer für das Erstellen einer neuen Task (POST /api/tasks/).'''
 
     assignee_id = serializers.PrimaryKeyRelatedField(
-        source='assignee', queryset=User.objects.all(), required=False, allow_null=True
+        source='assignee', queryset=User.objects.all(), write_only=True, required=False, allow_null=True
     )
     reviewer_id = serializers.PrimaryKeyRelatedField(
-        source='reviewer', queryset=User.objects.all(), required=False, allow_null=True
+        source='reviewer', queryset=User.objects.all(), write_only=True, required=False, allow_null=True
     )
     assignee = MemberSerializer(read_only=True)
     reviewer = MemberSerializer(read_only=True)
@@ -44,6 +44,10 @@ class TaskCreateSerializer(serializers.ModelSerializer):
             'due_date',
             'comments_count',
         ]
+        extra_kwargs = {
+            'assignee_id': {'write_only': True},
+            'reviewer_id': {'write_only': True},
+        }
 
     def get_comments_count(self, obj):
         return obj.comments.count()
@@ -76,10 +80,10 @@ class TaskCreateSerializer(serializers.ModelSerializer):
 class TaskUpdateSerializer(serializers.ModelSerializer):
     '''Serializer für Task-Aktualisierung (PATCH /api/tasks/{id}/).'''
     assignee_id = serializers.PrimaryKeyRelatedField(
-        source='assignee', queryset=User.objects.all(), required=False, allow_null=True
+        source='assignee', queryset=User.objects.all(), write_only=True, required=False, allow_null=True
     )
     reviewer_id = serializers.PrimaryKeyRelatedField(
-        source='reviewer', queryset=User.objects.all(), required=False, allow_null=True
+        source='reviewer', queryset=User.objects.all(), write_only=True, required=False, allow_null=True
     )
     assignee = serializers.SerializerMethodField()
     reviewer = serializers.SerializerMethodField()
