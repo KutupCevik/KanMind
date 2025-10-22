@@ -138,7 +138,7 @@ class TaskListSerializer(serializers.ModelSerializer):
     assignee = MemberSerializer(read_only=True)
     reviewer = MemberSerializer(read_only=True)
     comments_count = serializers.IntegerField(source='comments.count', read_only=True)
-    board = serializers.IntegerField(source='bord.id')
+    board = serializers.IntegerField(source='board.id')
 
     class Meta:
         model = Task
