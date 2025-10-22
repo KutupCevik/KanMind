@@ -26,6 +26,16 @@ class BoardListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         # Owner automatisch aus dem eingeloggten Benutzer setzen
         serializer.save(owner=self.request.user)
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        board = serializer.instance
+        response_serializer = BoardListSerializer(board)
+
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
 
 class BoardDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
