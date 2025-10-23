@@ -1,10 +1,10 @@
 # Third-party
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, NotFound
 
 # Lokale Module
-from kanban_app.models import Task
+from kanban_app.models import Task, Board
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -18,7 +18,7 @@ class MemberSerializer(serializers.ModelSerializer):
 
 class TaskCreateSerializer(serializers.ModelSerializer):
     '''Serializer für das Erstellen einer neuen Task (POST /api/tasks/).'''
-
+    board = serializers.IntegerField(write_only=True)
     assignee_id = serializers.PrimaryKeyRelatedField(
         source='assignee', queryset=User.objects.all(), write_only=True, required=False, allow_null=True
     )
@@ -53,29 +53,34 @@ class TaskCreateSerializer(serializers.ModelSerializer):
     def get_comments_count(self, obj):
         return obj.comments.count()
 
-    def validate_board(self, board):
-        '''Prüfen, ob der Benutzer Mitglied des Boards ist.'''
+    def validate(self, data):
         user = self.context['request'].user
+        board_id = data.get('board')
+
+        # Manuelle Prüfung auf Existenz. 404
+        try:
+            board = Board.objects.get(pk=board_id)
+        except Board.DoesNotExist:
+            raise NotFound('Board nicht gefunden. Die angegebene Board-ID existiert nicht.')
+
+        # Berechtigungsprüfung. 403
         if not (board.owner == user or board.members.filter(id=user.id).exists()):
             raise PermissionDenied('Du bist kein Mitglied dieses Boards.')
-        return board
 
-    def validate(self, data):
-        '''Assignee und Reviewer müssen Mitglieder desselben Boards sein.'''
-        board = data.get('board')
+        # Assignee/Reviewer keine Board-Mitglieder
+        data['board'] = board
         assignee = data.get('assignee')
         reviewer = data.get('reviewer')
 
         for person in [assignee, reviewer]:
             if person and not board.members.filter(id=person.id).exists() and person != board.owner:
-                raise serializers.ValidationError('Assignee oder Reviewer ist kein Mitglied des Boards.')
+                raise serializers.ValidationError('Assignee oder Reviewer ist kein Mitglied dieses Boards.')
         return data
 
     def create(self, validated_data):
         user = self.context['request'].user
         validated_data['created_by'] = user
-        task = Task.objects.create(**validated_data)
-        return task
+        return Task.objects.create(**validated_data)
 
 
 class TaskUpdateSerializer(serializers.ModelSerializer):
