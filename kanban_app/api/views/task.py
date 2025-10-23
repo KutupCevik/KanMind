@@ -2,6 +2,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import ValidationError
 
 # Lokale Module
 from kanban_app.models import Task
@@ -34,6 +35,12 @@ class TaskUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         task = self.get_object()
         self.perform_destroy(task)
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        if not pk.isdigit():
+            raise ValidationError('Ungültige Task-ID.')
+        return super().get_object()
 
 
 class TasksAssignedToMeView(generics.ListAPIView):

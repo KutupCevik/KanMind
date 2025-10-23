@@ -8,7 +8,7 @@ urlpatterns = [
     path('boards/<int:pk>/', BoardDetailUpdateDeleteView.as_view(), name='board-detail'),
 
     path('tasks/', TaskCreateView.as_view(), name='task-create'),
-    path('tasks/<int:pk>/', TaskUpdateDeleteView.as_view(), name='task-update-delete'),
+    path('tasks/<pk>/', TaskUpdateDeleteView.as_view(), name='task-update-delete'),
     path('tasks/assigned-to-me/', TasksAssignedToMeView.as_view(), name='tasks-assigned-to-me'),
     path('tasks/reviewing/', TasksReviewingView.as_view(), name='tasks-reviewing'),
     
