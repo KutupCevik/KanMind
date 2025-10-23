@@ -1,10 +1,13 @@
 from django.contrib import admin
-from .models import Board
+from .models import Board, BoardMember, Task
 
 
 @admin.register(Board)
 class BoardAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'owner', 'created_at')
+    list_display = ('id', 'title', 'owner')
     search_fields = ('title', 'owner__username', 'owner__email')
-    list_filter = ('created_at',)
-    ordering = ('-created_at',)
+
+
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'board', 'created_by')
