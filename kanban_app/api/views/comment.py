@@ -2,12 +2,12 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import PermissionDenied, NotFound
+from rest_framework.exceptions import PermissionDenied, NotFound, ValidationError
 
 # Lokale Module
 from kanban_app.models import Comment, Task
 from kanban_app.api.serializers.comment import CommentSerializer
-from kanban_app.api.permissions import IsBoardMemberOrOwner, IsCommentAuthor
+from kanban_app.api.permissions import IsCommentAuthor
 
 
 class CommentListCreateView(generics.ListCreateAPIView):
@@ -60,3 +60,10 @@ class CommentDeleteView(generics.DestroyAPIView):
         comment = self.get_object()
         self.perform_destroy(comment)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get_object(self):
+        task_id = self.kwargs.get('task_id')
+        comment_id = self.kwargs.get('pk')
+        if not (task_id.isdigit() and comment_id.isdigit()):
+            raise ValidationError('Ungültige ID.')
+        return super().get_object()
