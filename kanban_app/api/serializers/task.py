@@ -5,6 +5,7 @@ from rest_framework.exceptions import PermissionDenied, NotFound
 
 # Lokale Module
 from kanban_app.models import Task, Board
+from kanban_app.api.fields import BoardPrimaryKeyField
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -18,7 +19,7 @@ class MemberSerializer(serializers.ModelSerializer):
 
 class TaskCreateSerializer(serializers.ModelSerializer):
     '''Serializer für das Erstellen einer neuen Task (POST /api/tasks/).'''
-    board = serializers.PrimaryKeyRelatedField(
+    board = BoardPrimaryKeyField(
         queryset=Board.objects.all(),
         required=True,
         write_only=False
@@ -56,12 +57,6 @@ class TaskCreateSerializer(serializers.ModelSerializer):
     def validate(self, data):
         user = self.context['request'].user
         board = data.get('board')
-
-        # 404 - Board existiert nicht
-        try:
-            board = Board.objects.get(pk=board.id)
-        except Board.DoesNotExist:
-            raise NotFound('Board nicht gefunden. Die angegebene Board-ID existiert nicht.')
 
         # 403 – Kein Mitglied
         if not (board.owner == user or board.members.filter(id=user.id).exists()):
