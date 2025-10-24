@@ -58,7 +58,5 @@ class TasksReviewingView(generics.ListAPIView):
     GET: Gibt alle Tasks zurück, bei denen der Benutzer Reviewer ist.
     '''
     serializer_class = TaskListSerializer
-    permission_classes = [IsAuthenticated]
-
     def get_queryset(self):
         return Task.objects.filter(reviewer=self.request.user)
