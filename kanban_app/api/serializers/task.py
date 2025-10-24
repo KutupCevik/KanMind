@@ -18,7 +18,11 @@ class MemberSerializer(serializers.ModelSerializer):
 
 class TaskCreateSerializer(serializers.ModelSerializer):
     '''Serializer für das Erstellen einer neuen Task (POST /api/tasks/).'''
-    board = serializers.IntegerField(write_only=True)
+    board = serializers.PrimaryKeyRelatedField(
+        queryset=Board.objects.all(),
+        required=True,
+        write_only=False
+    )
     assignee_id = serializers.PrimaryKeyRelatedField(
         source='assignee', queryset=User.objects.all(), write_only=True, required=False, allow_null=True
     )
@@ -45,36 +49,32 @@ class TaskCreateSerializer(serializers.ModelSerializer):
             'due_date',
             'comments_count',
         ]
-        extra_kwargs = {
-            'assignee_id': {'write_only': True},
-            'reviewer_id': {'write_only': True},
-        }
 
     def get_comments_count(self, obj):
         return obj.comments.count()
 
     def validate(self, data):
         user = self.context['request'].user
-        board_id = data.get('board')
+        board = data.get('board')
 
-        # Manuelle Prüfung auf Existenz. 404
+        # 404 - Board existiert nicht
         try:
-            board = Board.objects.get(pk=board_id)
+            board = Board.objects.get(pk=board.id)
         except Board.DoesNotExist:
             raise NotFound('Board nicht gefunden. Die angegebene Board-ID existiert nicht.')
 
-        # Berechtigungsprüfung. 403
+        # 403 – Kein Mitglied
         if not (board.owner == user or board.members.filter(id=user.id).exists()):
             raise PermissionDenied('Du bist kein Mitglied dieses Boards.')
 
-        # Assignee/Reviewer keine Board-Mitglieder
-        data['board'] = board
+        # 400 – Assignee/Reviewer ungültig
         assignee = data.get('assignee')
         reviewer = data.get('reviewer')
-
         for person in [assignee, reviewer]:
             if person and not board.members.filter(id=person.id).exists() and person != board.owner:
                 raise serializers.ValidationError('Assignee oder Reviewer ist kein Mitglied dieses Boards.')
+        
+        data['board'] = board
         return data
 
     def create(self, validated_data):
