@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 from django.contrib.auth import authenticate
 import re
 
@@ -20,7 +21,14 @@ class RegistrationView(APIView):
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
+            try:
+                user = serializer.save()
+            except IntegrityError:
+                return Response(
+                    {"detail": "Ein Benutzer mit dieser E-Mail-Adresse existiert bereits."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
             token, _ = Token.objects.get_or_create(user=user)
             return Response({
                 "token": token.key,
