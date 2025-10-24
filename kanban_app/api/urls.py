@@ -7,10 +7,10 @@ urlpatterns = [
     path('boards/', BoardListCreateView.as_view(), name='board-list'),
     path('boards/<int:pk>/', BoardDetailUpdateDeleteView.as_view(), name='board-detail'),
 
-    path('tasks/', TaskCreateView.as_view(), name='task-create'),
-    path('tasks/<pk>/', TaskUpdateDeleteView.as_view(), name='task-update-delete'),
     path('tasks/assigned-to-me/', TasksAssignedToMeView.as_view(), name='tasks-assigned-to-me'),
     path('tasks/reviewing/', TasksReviewingView.as_view(), name='tasks-reviewing'),
+    path('tasks/', TaskCreateView.as_view(), name='task-create'),
+    path('tasks/<pk>/', TaskUpdateDeleteView.as_view(), name='task-update-delete'),
     
     path('tasks/<int:task_id>/comments/', CommentListCreateView.as_view(), name='comment-list-create'),
     path('tasks/<task_id>/comments/<pk>/', CommentDeleteView.as_view(), name='comment-delete'),
