@@ -11,8 +11,8 @@ from kanban_app.api.permissions import IsBoardMemberOrOwner, IsBoardOwner
 
 class BoardListCreateView(generics.ListCreateAPIView):
     '''
-    GET  /api/boards/: Zeigt alle Boards, bei denen der Benutzer beteiligt ist.
-    POST /api/boards/: Erstellt ein neues Board, setzt den Benutzer als Owner.
+    GET  /api/boards/: Displays all boards the user is involved in.
+    POST /api/boards/: Creates a new board and sets the user as the owner.
     '''
     def get_queryset(self):
         user = self.request.user
@@ -40,9 +40,9 @@ class BoardListCreateView(generics.ListCreateAPIView):
 
 class BoardDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     '''
-    GET     /api/boards/{board_id}/: Zeigt Board mit Members und Tasks.
-    PATCH   /api/boards/{board_id}/: Aktualisiert Titel und Mitgliederliste.
-    DELETE  /api/boards/{board_id}/: Board löschen (nur Owner).
+    GET     /api/boards/{board_id}/: Displays a board with members and tasks.
+    PATCH   /api/boards/{board_id}/: Updates the title and member list.
+    DELETE  /api/boards/{board_id}/: Deletes the board (owner only).
     '''
     queryset = Board.objects.all()
 

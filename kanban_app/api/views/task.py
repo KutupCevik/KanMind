@@ -12,8 +12,8 @@ from kanban_app.api.permissions import IsBoardMemberOrOwner, IsTaskCreatorOrBoar
 
 class TaskCreateView(generics.CreateAPIView):
     '''
-    POST: Erstellt eine neue Task in einem Board.
-    Nur Board-Mitglieder oder der Owner dürfen Tasks erstellen.
+    POST: Creates a new task in a board.
+    Only board members or the owner are allowed to create tasks.
     '''
     queryset = Task.objects.all()
     serializer_class = TaskCreateSerializer
@@ -21,8 +21,8 @@ class TaskCreateView(generics.CreateAPIView):
 
 class TaskUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     '''
-    PATCH: Aktualisiert eine bestehende Task.
-    DELETE: Löscht eine Task. Nur der Ersteller oder der Board-Owner darf löschen.
+    PATCH: Updates an existing task.
+    DELETE: Deletes a task. Only the creator or the board owner is allowed to delete.
     '''
     queryset = Task.objects.all()
     serializer_class = TaskUpdateSerializer
@@ -45,7 +45,7 @@ class TaskUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
 class TasksAssignedToMeView(generics.ListAPIView):
     '''
-    GET: Gibt alle Tasks zurück, bei denen der Benutzer Assignee ist.
+    GET: Returns all tasks where the user is the assignee.
     '''
     serializer_class = TaskListSerializer
 
@@ -55,7 +55,7 @@ class TasksAssignedToMeView(generics.ListAPIView):
 
 class TasksReviewingView(generics.ListAPIView):
     '''
-    GET: Gibt alle Tasks zurück, bei denen der Benutzer Reviewer ist.
+    GET: Returns all tasks where the user is the reviewer.
     '''
     serializer_class = TaskListSerializer
     def get_queryset(self):

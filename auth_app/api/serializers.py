@@ -11,8 +11,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'fullname', 'email', 'password', 'repeated_password']
         extra_kwargs = {'password': {'write_only': True}}
-        #extra_kwargs erlaubt, Verhalten einzelner Felder anzupassen
-        #Passwort nur eingeben, nie zurückgeben
 
     def validate(self, data):
         if data['password'] != data['repeated_password']:
@@ -22,10 +20,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop('repeated_password')
         user = User.objects.create_user(
-            #Das User-Model von Django hat das Pflichtfeld "username"
-            #https://docs.djangoproject.com/en/5.2/ref/contrib/auth/#user-model
-            #Selbst wenn man sich per E-Mail einloggt, erwartet Django intern ein username
-            username=validated_data['email'],   # Username intern = E-Mail
+            username=validated_data['email'],
             email=validated_data['email'],
             password=validated_data['password'],
             first_name=validated_data['fullname']

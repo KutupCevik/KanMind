@@ -68,26 +68,23 @@ class LoginView(APIView):
 class EmailCheckView(APIView):
     '''
     GET /api/email-check/
-    Prüft, ob eine E-Mail im System existiert.
+    Checks if an email exists in the system.
     '''
     def get(self, request):
         email = request.query_params.get('email')
 
-        # 400 – keine oder ungültige E-Mail
         if not email:
             return Response(
                 {'detail': 'E-Mail-Adresse fehlt oder hat ein falsches Format.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Formatprüfung per Regex
         if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email):
             return Response(
                 {'detail': 'E-Mail-Adresse fehlt oder hat ein falsches Format.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # 404 – Benutzer nicht gefunden
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -96,7 +93,6 @@ class EmailCheckView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        # 200 – Erfolg
         data = {
             'id': user.id,
             'email': user.email,

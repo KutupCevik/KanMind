@@ -4,7 +4,7 @@ from rest_framework.permissions import BasePermission
 
 class IsBoardMemberOrOwner(BasePermission):
     """
-    Zugriff auf Boards wenn der Benutzer Mitglied oder Owner ist
+    Access to boards if the user is a member or the owner
     """
     def has_object_permission(self, request, view, obj):
         user = request.user
@@ -22,14 +22,14 @@ class IsBoardMemberOrOwner(BasePermission):
 
 class IsBoardOwner(BasePermission):
     '''
-    Zugriff nur für den Owner eines Boards
+    Access restricted to the board owner only
     '''
     def has_object_permission(self, request, view, obj):
         return obj.owner == request.user
 
 
 class IsTaskCreatorOrBoardOwner(BasePermission):
-    '''Erlaubt Löschen nur für den Task-Ersteller oder den Board-Owner.'''
+    '''Allows deletion only for the task creator or the board owner.'''
     def has_object_permission(self, request, view, obj):
         return (
             obj.created_by == request.user or
@@ -38,6 +38,6 @@ class IsTaskCreatorOrBoardOwner(BasePermission):
 
 
 class IsCommentAuthor(BasePermission):
-    '''Erlaubt Löschen nur für den Autor des Kommentars.'''
+    '''Allows deletion only for the comment author.'''
     def has_object_permission(self, request, view, obj):
         return obj.author == request.user

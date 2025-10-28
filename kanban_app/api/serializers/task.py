@@ -9,7 +9,7 @@ from kanban_app.api.fields import BoardPrimaryKeyField
 
 
 class MemberSerializer(serializers.ModelSerializer):
-    '''Kurzserializer für User (Assignee/Reviewer).'''
+    '''Serializer for users (assignee/reviewer).'''
     fullname = serializers.CharField(source='first_name')
 
     class Meta:
@@ -18,7 +18,7 @@ class MemberSerializer(serializers.ModelSerializer):
 
 
 class TaskCreateSerializer(serializers.ModelSerializer):
-    '''Serializer für das Erstellen einer neuen Task (POST /api/tasks/).'''
+    '''Serializer for creating a new task (POST /api/tasks/).'''
     board = BoardPrimaryKeyField(
         queryset=Board.objects.all(),
         required=True,
@@ -58,11 +58,9 @@ class TaskCreateSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         board = data.get('board')
 
-        # 403 – Kein Mitglied
         if not (board.owner == user or board.members.filter(id=user.id).exists()):
             raise PermissionDenied('Du bist kein Mitglied dieses Boards.')
 
-        # 400 – Assignee/Reviewer ungültig
         assignee = data.get('assignee')
         reviewer = data.get('reviewer')
         for person in [assignee, reviewer]:
@@ -79,7 +77,7 @@ class TaskCreateSerializer(serializers.ModelSerializer):
 
 
 class TaskUpdateSerializer(serializers.ModelSerializer):
-    '''Serializer für Task-Aktualisierung (PATCH /api/tasks/{id}/).'''
+    '''Serializer for task update (PATCH /api/tasks/{id}/).'''
     assignee_id = serializers.PrimaryKeyRelatedField(
         source='assignee', queryset=User.objects.all(), write_only=True, required=False, allow_null=True
     )
@@ -135,7 +133,7 @@ class TaskUpdateSerializer(serializers.ModelSerializer):
 
 
 class TaskListSerializer(serializers.ModelSerializer):
-    '''Serializer für Task-Listen (Assigned-to-me / Reviewing).'''
+    '''Serializer for task lists (assigned-to-me / reviewing).'''
     assignee = MemberSerializer(read_only=True)
     reviewer = MemberSerializer(read_only=True)
     comments_count = serializers.IntegerField(source='comments.count', read_only=True)

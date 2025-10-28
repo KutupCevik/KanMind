@@ -12,9 +12,9 @@ from kanban_app.api.permissions import IsCommentAuthor
 
 class CommentListCreateView(generics.ListCreateAPIView):
     '''
-    GET: Listet alle Kommentare einer Task.
-    POST: Erstellt neuen Kommentar.
-    Nur Board-Member oder Owner dürfen zugreifen.
+    GET: Lists all comments for a task.
+    POST: Creates a new comment.
+    Only board members or the owner are allowed to access.
     '''
     serializer_class = CommentSerializer
 
@@ -50,8 +50,8 @@ class CommentListCreateView(generics.ListCreateAPIView):
 
 class CommentDeleteView(generics.DestroyAPIView):
     '''
-    DELETE: Löscht einen Kommentar.
-    Nur der Autor darf löschen.
+    DELETE: Deletes a comment.
+    Only the author is allowed to delete.
     '''
     queryset = Comment.objects.all()
     permission_classes = [IsAuthenticated, IsCommentAuthor]

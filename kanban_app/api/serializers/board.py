@@ -12,7 +12,7 @@ from django.db.models import Count
 
 class BoardListSerializer(serializers.ModelSerializer):
     """
-    Serializer für Board-Übersicht (GET /api/boards/)
+    Serializer for board overview (GET /api/boards/)
     """
     member_count = serializers.SerializerMethodField()
     ticket_count = serializers.SerializerMethodField()
@@ -46,7 +46,7 @@ class BoardListSerializer(serializers.ModelSerializer):
 
 class BoardCreateSerializer(serializers.ModelSerializer):
     """
-    Serializer für Board-Erstellung (POST /api/boards/)
+    Serializer for board creation (POST /api/boards/)
     """
     members = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False)
 
@@ -63,7 +63,7 @@ class BoardCreateSerializer(serializers.ModelSerializer):
 
 class MemberSerializer(serializers.ModelSerializer):
     '''
-    Für Board-Mitglieder
+    For board members
     '''
     fullname = serializers.CharField(source='first_name')
 
@@ -74,7 +74,7 @@ class MemberSerializer(serializers.ModelSerializer):
 
 class TaskListSerializer(serializers.ModelSerializer):
     '''
-    Für Tasks im Board-Detail
+    For tasks in the board detail view
     '''
     assignee = MemberSerializer(read_only=True)
     reviewer = MemberSerializer(read_only=True)
@@ -97,7 +97,7 @@ class TaskListSerializer(serializers.ModelSerializer):
 
 class BoardDetailSerializer(serializers.ModelSerializer):
     '''
-    Serializer für Board-Detail (GET /api/boards/{id}/)
+    Serializer for board detail (GET /api/boards/{id}/)
     '''
     owner_id = serializers.IntegerField(source='owner.id', read_only=True)
     members = MemberSerializer(many=True, read_only=True)
@@ -110,7 +110,7 @@ class BoardDetailSerializer(serializers.ModelSerializer):
 
 class BoardUpdateSerializer(serializers.ModelSerializer):
     '''
-    Serializer für Board-Update (PATCH /api/boards/{id}/)
+    Serializer for board update (PATCH /api/boards/{id}/)
     '''
     members = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
     owner_data = MemberSerializer(source='owner', read_only=True)
@@ -125,9 +125,7 @@ class BoardUpdateSerializer(serializers.ModelSerializer):
         instance.title = validated_data.get('title', instance.title)
         instance.save()
 
-        # Mitgliederliste ersetzen (bestehende löschen, neue setzen)
         instance.members.set(members)
-        # Owner bleibt automatisch Mitglied
         instance.members.add(instance.owner)
 
         return instance

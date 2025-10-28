@@ -3,8 +3,8 @@ from rest_framework.exceptions import NotFound
 
 class BoardPrimaryKeyField(serializers.PrimaryKeyRelatedField):
     """
-    Erweitertes PK-Feld, das 404 zurückgibt, wenn das Objekt nicht existiert,
-    statt ValidationError (400).
+    Extended PK field that returns 404 if the object doesn’t exist,
+    instead of a ValidationError (400).
     """
     def get_queryset(self):
         # Sicherheitsnetz: falls queryset None ist

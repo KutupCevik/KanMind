@@ -6,10 +6,8 @@ from django.contrib.auth.models import User
 
 class Board(models.Model):
     title = models.CharField(max_length=255)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_boards')  #Zugriff auf alle Boards, die dieser Benutzer besitzt
-    members = models.ManyToManyField(User, through='BoardMember', related_name='boards')    #Zugriff auf alle Boards, in denen dieser Benutzer Mitglied ist
-    #related_name-Werte sind dazu da, dass du vom Benutzer aus (also vom User-Objekt) auf die verknüpften Boards zugreifen kannst.
-    #Ohne sie würdest es später zu Namenskonflikten kommen, weil beide Beziehungen (owner und members) auf dasselbe Modell User zeigen.
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_boards')
+    members = models.ManyToManyField(User, through='BoardMember', related_name='boards')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -20,16 +18,11 @@ class BoardMember(models.Model):
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     added_at = models.DateTimeField(auto_now_add=True)
-
-    #https://docs.djangoproject.com/en/5.2/ref/models/options/#unique-together
-    #Ein Benutzer könnte mehrmals als Member in demselben Board eingetragen werden
-    #Deshalb unique_together. Die Kombination aus board und user darf nur einmal existieren
     class Meta:
         unique_together = ('board', 'user')
 
 
 class Task(models.Model):
-    #https://docs.djangoproject.com/en/5.2/ref/models/fields/#choices
     STATUS_CHOICES = [
         ('to-do', 'To Do'),
         ('in-progress', 'In Progress'),
