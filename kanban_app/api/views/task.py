@@ -11,19 +11,19 @@ from kanban_app.api.permissions import IsBoardMemberOrOwner, IsTaskCreatorOrBoar
 
 
 class TaskCreateView(generics.CreateAPIView):
-    '''
+    """
     POST: Creates a new task in a board.
     Only board members or the owner are allowed to create tasks.
-    '''
+    """
     queryset = Task.objects.all()
     serializer_class = TaskCreateSerializer
 
 
 class TaskUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
-    '''
+    """
     PATCH: Updates an existing task.
     DELETE: Deletes a task. Only the creator or the board owner is allowed to delete.
-    '''
+    """
     queryset = Task.objects.all()
     serializer_class = TaskUpdateSerializer
     def get_permissions(self):
@@ -44,9 +44,9 @@ class TaskUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class TasksAssignedToMeView(generics.ListAPIView):
-    '''
+    """
     GET: Returns all tasks where the user is the assignee.
-    '''
+    """
     serializer_class = TaskListSerializer
 
     def get_queryset(self):
@@ -54,9 +54,9 @@ class TasksAssignedToMeView(generics.ListAPIView):
 
 
 class TasksReviewingView(generics.ListAPIView):
-    '''
+    """
     GET: Returns all tasks where the user is the reviewer.
-    '''
+    """
     serializer_class = TaskListSerializer
     def get_queryset(self):
         return Task.objects.filter(reviewer=self.request.user)

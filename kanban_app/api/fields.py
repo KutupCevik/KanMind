@@ -7,7 +7,6 @@ class BoardPrimaryKeyField(serializers.PrimaryKeyRelatedField):
     instead of a ValidationError (400).
     """
     def get_queryset(self):
-        # Sicherheitsnetz: falls queryset None ist
         if self.queryset is None:
             raise AssertionError(f'{self.__class__.__name__} muss ein queryset haben.')
         return self.queryset

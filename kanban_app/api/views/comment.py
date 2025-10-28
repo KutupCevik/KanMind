@@ -11,11 +11,11 @@ from kanban_app.api.permissions import IsCommentAuthor
 
 
 class CommentListCreateView(generics.ListCreateAPIView):
-    '''
+    """
     GET: Lists all comments for a task.
     POST: Creates a new comment.
     Only board members or the owner are allowed to access.
-    '''
+    """
     serializer_class = CommentSerializer
 
     def get_task(self):
@@ -30,7 +30,6 @@ class CommentListCreateView(generics.ListCreateAPIView):
         user = self.request.user
         board = task.board
 
-        # Zugriff prüfen
         if not (board.owner == user or board.members.filter(id=user.id).exists()):
             raise PermissionDenied('Du bist kein Mitglied dieses Boards.')
 
@@ -41,7 +40,6 @@ class CommentListCreateView(generics.ListCreateAPIView):
         user = self.request.user
         board = task.board
 
-        # Zugriff prüfen
         if not (board.owner == user or board.members.filter(id=user.id).exists()):
             raise PermissionDenied('Du bist kein Mitglied dieses Boards.')
 
@@ -49,10 +47,10 @@ class CommentListCreateView(generics.ListCreateAPIView):
 
 
 class CommentDeleteView(generics.DestroyAPIView):
-    '''
+    """
     DELETE: Deletes a comment.
     Only the author is allowed to delete.
-    '''
+    """
     queryset = Comment.objects.all()
     permission_classes = [IsAuthenticated, IsCommentAuthor]
 

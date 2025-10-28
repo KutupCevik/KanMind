@@ -9,7 +9,7 @@ from kanban_app.api.fields import BoardPrimaryKeyField
 
 
 class MemberSerializer(serializers.ModelSerializer):
-    '''Serializer for users (assignee/reviewer).'''
+    """Serializer for users (assignee/reviewer)."""
     fullname = serializers.CharField(source='first_name')
 
     class Meta:
@@ -18,7 +18,7 @@ class MemberSerializer(serializers.ModelSerializer):
 
 
 class TaskCreateSerializer(serializers.ModelSerializer):
-    '''Serializer for creating a new task (POST /api/tasks/).'''
+    """Serializer for creating a new task (POST /api/tasks/)."""
     board = BoardPrimaryKeyField(
         queryset=Board.objects.all(),
         required=True,
@@ -77,7 +77,7 @@ class TaskCreateSerializer(serializers.ModelSerializer):
 
 
 class TaskUpdateSerializer(serializers.ModelSerializer):
-    '''Serializer for task update (PATCH /api/tasks/{id}/).'''
+    """Serializer for task update (PATCH /api/tasks/{id}/)."""
     assignee_id = serializers.PrimaryKeyRelatedField(
         source='assignee', queryset=User.objects.all(), write_only=True, required=False, allow_null=True
     )
@@ -133,7 +133,7 @@ class TaskUpdateSerializer(serializers.ModelSerializer):
 
 
 class TaskListSerializer(serializers.ModelSerializer):
-    '''Serializer for task lists (assigned-to-me / reviewing).'''
+    """Serializer for task lists (assigned-to-me / reviewing)."""
     assignee = MemberSerializer(read_only=True)
     reviewer = MemberSerializer(read_only=True)
     comments_count = serializers.IntegerField(source='comments.count', read_only=True)

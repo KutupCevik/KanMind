@@ -3,7 +3,7 @@ from kanban_app.models import Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    '''Serializer for comments (GET / POST).'''
+    """Serializer for comments (GET / POST)."""
     author = serializers.CharField(source='author.first_name', read_only=True)
 
     class Meta:

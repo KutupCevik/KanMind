@@ -62,9 +62,9 @@ class BoardCreateSerializer(serializers.ModelSerializer):
 
 
 class MemberSerializer(serializers.ModelSerializer):
-    '''
+    """
     For board members
-    '''
+    """
     fullname = serializers.CharField(source='first_name')
 
     class Meta:
@@ -73,9 +73,9 @@ class MemberSerializer(serializers.ModelSerializer):
 
 
 class TaskListSerializer(serializers.ModelSerializer):
-    '''
+    """
     For tasks in the board detail view
-    '''
+    """
     assignee = MemberSerializer(read_only=True)
     reviewer = MemberSerializer(read_only=True)
     comments_count = serializers.IntegerField(source='comments.count', read_only=True)
@@ -96,9 +96,9 @@ class TaskListSerializer(serializers.ModelSerializer):
 
 
 class BoardDetailSerializer(serializers.ModelSerializer):
-    '''
+    """
     Serializer for board detail (GET /api/boards/{id}/)
-    '''
+    """
     owner_id = serializers.IntegerField(source='owner.id', read_only=True)
     members = MemberSerializer(many=True, read_only=True)
     tasks = TaskListSerializer(many=True, read_only=True, source='tasks.all')
@@ -109,9 +109,9 @@ class BoardDetailSerializer(serializers.ModelSerializer):
 
 
 class BoardUpdateSerializer(serializers.ModelSerializer):
-    '''
+    """
     Serializer for board update (PATCH /api/boards/{id}/)
-    '''
+    """
     members = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
     owner_data = MemberSerializer(source='owner', read_only=True)
     members_data = MemberSerializer(source='members', many=True, read_only=True)

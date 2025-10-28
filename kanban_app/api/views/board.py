@@ -10,10 +10,10 @@ from kanban_app.api.permissions import IsBoardMemberOrOwner, IsBoardOwner
 
 
 class BoardListCreateView(generics.ListCreateAPIView):
-    '''
+    """
     GET  /api/boards/: Displays all boards the user is involved in.
     POST /api/boards/: Creates a new board and sets the user as the owner.
-    '''
+    """
     def get_queryset(self):
         user = self.request.user
         owned = Board.objects.filter(owner=user)
@@ -24,7 +24,6 @@ class BoardListCreateView(generics.ListCreateAPIView):
         return BoardCreateSerializer if self.request.method == 'POST' else BoardListSerializer
     
     def perform_create(self, serializer):
-        # Owner automatisch aus dem eingeloggten Benutzer setzen
         serializer.save(owner=self.request.user)
     
     def create(self, request, *args, **kwargs):
@@ -39,11 +38,11 @@ class BoardListCreateView(generics.ListCreateAPIView):
 
 
 class BoardDetailUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
-    '''
+    """
     GET     /api/boards/{board_id}/: Displays a board with members and tasks.
     PATCH   /api/boards/{board_id}/: Updates the title and member list.
     DELETE  /api/boards/{board_id}/: Deletes the board (owner only).
-    '''
+    """
     queryset = Board.objects.all()
 
     def get_permissions(self):
