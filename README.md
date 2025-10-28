@@ -161,6 +161,7 @@ Your .env file must include all environment variables such as:
 SECRET_KEY=your_django_secret_key
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1,localhost
+DATABASE_NAME=db.sqlite3
 ```
 
 
