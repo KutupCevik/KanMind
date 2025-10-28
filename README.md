@@ -27,6 +27,8 @@ kanban_app/
 │   │── permissions.py
 │   │── urls.py
 │
+.env               ← private file (ignored by Git)
+.env.template      ← public template (committed)
 requirements.txt
 README.md
 ```
@@ -43,25 +45,56 @@ Both **Windows** and **macOS** installation instructions are included.
 git clone https://github.com/KutupCevik/KanMind.git
 cd KanMind
 
-# 2. Create and activate a virtual environment
+# 2. Create a virtual environment
 python -m venv env
+
+# 3. Activate the virtual environment
+# If it does not work directly, open a new Command Prompt (cmd),
+# navigate back into the project folder, then run:
 "env\Scripts\activate"
 
-# 3. Install dependencies
+# 4. Install dependencies
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 
-# 4. Apply migrations and create the database
+# 5. Create a .env file
+# Copy the provided .env.template and rename it to .env
+# Then generate your own SECRET_KEY using the command below
+
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+
+# Copy the printed key into your .env file, like this:
+# SECRET_KEY=django-insecure-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Example .env
+# ------------------------------------
+# SECRET_KEY=your-generated-key
+# DEBUG=True
+# ALLOWED_HOSTS=127.0.0.1,localhost
+# CORS_ALLOWED_ORIGINS=http://127.0.0.1:5500,http://localhost:5500
+# DATABASE_NAME=db.sqlite3
+# ------------------------------------
+
+# 6. Apply migrations
 python manage.py migrate
 
-# 5. (Optional) Create a superuser for admin access
+# 7. (Optional) Create an admin user
 python manage.py createsuperuser
 
-# 6. Run the development server
+# 8. Run the development server
 python manage.py runserver
 
-# 7. Open in your browser
+# 9. Open the app in your browser
 # → http://127.0.0.1:8000/
+```
+```bash
+# Optional: Clean up cached files
+# If you see __pycache__ folders marked for commit in VS Code,
+# remove them from Git tracking and reapply .gitignore:
+
+git rm -r --cached .
+git add .
+git commit -m "Remove cached files and apply .gitignore"
 ```
 
 # 🍎 macOS Setup
@@ -79,17 +112,44 @@ source env/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# 4. Apply migrations
+# 4. Create a .env file
+# Copy the .env.template file and rename it to .env
+# Then generate a new SECRET_KEY using the command below
+
+python3 -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+
+# Paste the key into your .env file:
+# SECRET_KEY=django-insecure-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Example .env
+# ------------------------------------
+# SECRET_KEY=your-generated-key
+# DEBUG=True
+# ALLOWED_HOSTS=127.0.0.1,localhost
+# CORS_ALLOWED_ORIGINS=http://127.0.0.1:5500,http://localhost:5500
+# DATABASE_NAME=db.sqlite3
+# ------------------------------------
+
+# 5. Apply migrations
 python3 manage.py migrate
 
-# 5. (Optional) Create a superuser
+# 6. (Optional) Create an admin user
 python3 manage.py createsuperuser
 
-# 6. Run the server
+# 7. Run the development server
 python3 manage.py runserver
 
-# 7. Open in your browser
+# 8. Open the app in your browser
 # → http://127.0.0.1:8000/
+```
+```bash
+# Optional: Clean up cached files
+# If you see __pycache__ folders marked for commit in VS Code,
+# remove them from Git tracking and reapply .gitignore:
+
+git rm -r --cached .
+git add .
+git commit -m "Remove cached files and apply .gitignore"
 ```
 
 # ⚙️ Notes
