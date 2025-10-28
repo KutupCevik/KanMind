@@ -157,10 +157,11 @@ git commit -m "Remove cached files and apply .gitignore"
 Make sure Python ≥ 3.10 and Git are installed.
 
 Your .env file must include all environment variables such as:
-
+```bash
 SECRET_KEY=your_django_secret_key
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1,localhost
+```
 
 
 Stop the server anytime with:
